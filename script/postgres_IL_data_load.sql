@@ -92,15 +92,17 @@ SELECT
     floor(random()*100 + 1)::int,
     NOW() - (random()*365 || ' days')::interval,
     round((random()*1000 + 50)::numeric, 2)
-FROM generate_series(1,3000);
+FROM generate_series(1,8000);
 
 INSERT INTO retail.order_items (order_id, product_id, quantity, price)
 SELECT
-    floor(random()*5000 + 1)::int,
-    floor(random()*1000 + 1)::int,
+    o.order_id,
+    floor(random() * (SELECT max(product_id) FROM retail.products) + 1)::int,
     floor(random()*5 + 1)::int,
     round((random()*500 + 10)::numeric, 2)
-FROM generate_series(1,5000);
+FROM retail.orders o
+ORDER BY random()
+LIMIT 8000;
 
 -- =============================
 -- SUMMARY

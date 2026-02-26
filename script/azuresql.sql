@@ -1,4 +1,23 @@
 
+-- Count using CTE
+WITH counts AS (
+    SELECT
+        (SELECT count(*) FROM retail.customers) AS customers,
+        (SELECT count(*) FROM retail.products) AS products,
+        (SELECT count(*) FROM retail.stores) AS stores,
+        (SELECT count(*) FROM retail.orders) AS orders,
+        (SELECT count(*) FROM retail.order_items) AS order_items
+)
+SELECT
+    customers,
+    products,
+    stores,
+    orders,
+    order_items,
+    customers + products + stores + orders + order_items AS total_records
+FROM counts;
+
+
 SELECT
     (SELECT count(*) FROM retail.customers) AS customers,
     (SELECT count(*) FROM retail.products) AS products,
@@ -14,13 +33,6 @@ SELECT * FROM retail.customers;
 
 -- Truncate
 -- identity & cascade don't work for Azure SQL
-TRUNCATE TABLE
-    retail.order_items,
-    retail.orders,
-    retail.customers,
-    retail.products,
-    retail.stores
-RESTART IDENTITY CASCADE;
 
 -- use this for delete
 DELETE FROM retail.order_items;
