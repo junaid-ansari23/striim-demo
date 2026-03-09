@@ -1,1 +1,14 @@
-/.env
+# Environment variables
+.env
+
+# IDE
+.idea/
+*.iml
+
+# Docker
+docker-compose-old.yml
+
+# OS
+.DS_Store
+Thumbs.db
+

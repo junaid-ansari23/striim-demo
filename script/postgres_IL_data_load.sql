@@ -92,7 +92,7 @@ SELECT
     floor(random()*100 + 1)::int,
     NOW() - (random()*365 || ' days')::interval,
     round((random()*1000 + 50)::numeric, 2)
-FROM generate_series(1,8000);
+FROM generate_series(1,5000);
 
 INSERT INTO retail.order_items (order_id, product_id, quantity, price)
 SELECT
@@ -102,17 +102,35 @@ SELECT
     round((random()*500 + 10)::numeric, 2)
 FROM retail.orders o
 ORDER BY random()
-LIMIT 8000;
+    LIMIT 5000;
 
 -- =============================
 -- SUMMARY
 -- =============================
+
+WITH counts AS (
+    SELECT
+        (SELECT count(*) FROM retail.customers) AS customers,
+        (SELECT count(*) FROM retail.products) AS products,
+        (SELECT count(*) FROM retail.stores) AS stores,
+        (SELECT count(*) FROM retail.orders) AS orders,
+        (SELECT count(*) FROM retail.order_items) AS order_items
+)
 SELECT
-    (SELECT count(*) FROM customers) AS customers,
-    (SELECT count(*) FROM products) AS products,
-    (SELECT count(*) FROM stores) AS stores,
-    (SELECT count(*) FROM orders) AS orders,
-    (SELECT count(*) FROM order_items) AS order_items;
+    customers,
+    products,
+    stores,
+    orders,
+    order_items,
+    customers + products + stores + orders + order_items AS total_records
+FROM counts;
+
+SELECT
+    (SELECT count(*) FROM retail.customers) AS customers,
+    (SELECT count(*) FROM retail.products) AS products,
+    (SELECT count(*) FROM retail.stores) AS stores,
+    (SELECT count(*) FROM retail.orders) AS orders,
+    (SELECT count(*) FROM retail.order_items) AS order_items;
 
 -- =====================================================
 -- Retail Demo - Truncate Script

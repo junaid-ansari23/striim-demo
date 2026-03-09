@@ -1,5 +1,5 @@
 
--- Count using CTE
+
 WITH counts AS (
     SELECT
         (SELECT count(*) FROM retail.customers) AS customers,
